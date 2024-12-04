@@ -1,0 +1,58 @@
+@import 'normalize.css';
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+.form-wrapper {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    margin: 70px 0px;
+}
+
+.form {
+    width: 500px;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0px;
+}
+
+.value {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    &:focus-visible {
+        outline: none;
+    }
+}
+
+.value[readOnly] {
+    background-color: #e6e6e6;
+    color: #000000;
+    cursor: not-allowed;
+    border: none;
+    padding: 7px 10px;
+}
+
+.button {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.table-wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+}
