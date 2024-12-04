@@ -39,10 +39,10 @@ function Table({ data }) {
                 <tbody>
                     {data.map((invoice, index) => (
                         <tr key={index}>
-                            <td>{invoice.chiTietHdb.soHdb}</td>
-                            <td>{invoice.chiTietHdb.maSp}</td>
-                            <td>{invoice.chiTietHdb.slban}</td>
-                            <td>{invoice.chiTietHdb.khuyenMai}</td>
+                            <td>{invoice.tChiTietHdbs.soHdb}</td>
+                            <td>{invoice.tChiTietHdbs.maSp}</td>
+                            <td>{invoice.tChiTietHdbs.slban}</td>
+                            <td>{invoice.tChiTietHdbs.khuyenMai}</td>
                             <td>0</td>
                         </tr>
                     ))}

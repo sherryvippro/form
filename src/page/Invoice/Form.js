@@ -1,37 +1,20 @@
-import { useState } from 'react'
 import classNames from 'classnames/bind'
 
 import styles from './Form.module.scss'
-import Table from '../Product/Table'
 
 const cx = classNames.bind(styles)
 
-function Form({ invoice, dataToCreate, handleSubmit }) {
-    const [formProduct, setFormProduct] = useState({
-        maSp: '',
-        tenSp: '',
-        donGiaBan: '',
-        soLuong: '',
-        khuyenMai: '',
-        thanhTien: '',
-    })
-    const listProduct = [
-        {
-            maSp: '',
-            tenSp: '',
-            donGiaBan: '',
-            soLuong: '',
-            khuyenMai: '',
-            thanhTien: '',
-        },
-    ]
-
-    const handleOnClick = () => {}
-
-    const handleChangeProductInfo = () => {}
-
-    const handleChangeInvocieInfo = () => {}
-
+function Form({
+    listProduct,
+    invoice,
+    invoiceDetail,
+    errors,
+    dataToCreate,
+    handleSubmit,
+    handleChange,
+    handleOnClick,
+    handleOnDelete,
+}) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('product-add')}>
@@ -40,8 +23,8 @@ function Form({ invoice, dataToCreate, handleSubmit }) {
                     <select
                         className={cx('value')}
                         name="maSp"
-                        value={formProduct.maSp}
-                        onChange={handleChangeProductInfo}
+                        value={invoiceDetail.maSp}
+                        onChange={handleChange}
                     >
                         <option value="">Chọn sản phẩm</option>
                         {dataToCreate.products.map((product) => (
@@ -50,26 +33,29 @@ function Form({ invoice, dataToCreate, handleSubmit }) {
                             </option>
                         ))}
                     </select>
+                    {errors.tenSp && <p style={{ color: 'red' }}>{errors.tenSp}</p>}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Số lượng</label>
                     <input
                         className={cx('value')}
                         type="number"
-                        name="soLuong"
-                        value={formProduct.soLuong}
-                        onChange={handleChangeProductInfo}
+                        name="slban"
+                        value={invoiceDetail.slban}
+                        onChange={handleChange}
                     />
+                    {errors.slban && <p style={{ color: 'red' }}>{errors.slban}</p>}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Đơn giá</label>
                     <input
                         className={cx('value')}
                         type="number"
-                        value={formProduct.donGiaBan}
+                        value={invoiceDetail.donGiaBan}
                         name="donGiaBan"
-                        onChange={handleChangeProductInfo}
+                        onChange={handleChange}
                     />
+                    {errors.donGiaBan && <p style={{ color: 'red' }}>{errors.donGiaBan}</p>}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Khuyến mãi</label>
@@ -77,8 +63,8 @@ function Form({ invoice, dataToCreate, handleSubmit }) {
                         className={cx('value')}
                         type="number"
                         name="khuyenMai"
-                        value={formProduct.khuyenMai}
-                        onChange={handleChangeProductInfo}
+                        value={invoiceDetail.khuyenMai}
+                        onChange={handleChange}
                     />
                 </div>
                 <div className={cx('row')}>
@@ -96,7 +82,7 @@ function Form({ invoice, dataToCreate, handleSubmit }) {
                             <th>Tên sản phẩm</th>
                             <th>Giá bán</th>
                             <th>Số lượng</th>
-                            <th>Khuyến mãi</th>
+                            <th>Khuyến mãi (%)</th>
                             <th>Thành tiền</th>
                             <th>Thao tác</th>
                         </tr>
@@ -107,11 +93,17 @@ function Form({ invoice, dataToCreate, handleSubmit }) {
                                 <td>{product.maSp}</td>
                                 <td>{product.tenSp}</td>
                                 <td>{product.donGiaBan}</td>
-                                <td>{product.soLuong}</td>
+                                <td>{product.slban}</td>
                                 <td>{product.khuyenMai}</td>
-                                <td>{product.thanhTien}</td>
                                 <td>
-                                    <button>Xóa</button>
+                                    {product.donGiaBan * product.slban -
+                                        (product.donGiaBan * product.slban * product.khuyenMai) /
+                                            100}
+                                </td>
+                                <td>
+                                    <button onClick={() => handleOnDelete(product.maSp)}>
+                                        Xóa
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -145,7 +137,7 @@ function Form({ invoice, dataToCreate, handleSubmit }) {
                         className={cx('value')}
                         name="maNguoiDung"
                         value={invoice.maNguoiDung}
-                        onChange={handleChangeInvocieInfo}
+                        onChange={handleChange}
                     >
                         <option value="">Chọn khách hàng</option>
                         {dataToCreate.customers.map((customer) => (
@@ -154,6 +146,7 @@ function Form({ invoice, dataToCreate, handleSubmit }) {
                             </option>
                         ))}
                     </select>
+                    {errors.hoten && <p style={{ color: 'red' }}>{errors.hoten}</p>}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Tổng tiền</label>
@@ -161,9 +154,9 @@ function Form({ invoice, dataToCreate, handleSubmit }) {
                         className={cx('value')}
                         type="text"
                         name="tongHdb"
-                        readOnly
+                        // readOnly
                         value={invoice.tongHdb}
-                        onChange={handleChangeInvocieInfo}
+                        onChange={handleChange}
                     />
                 </div>
                 <div className={cx('button')}>
