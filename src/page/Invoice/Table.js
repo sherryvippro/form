@@ -6,6 +6,7 @@ const cx = classNames.bind(styles)
 function Table({ data }) {
     return (
         <div className={cx('wrapper')}>
+            <h4>Danh sách hóa đơn</h4>
             <table className={cx('table')}>
                 <thead>
                     <tr>
@@ -37,15 +38,17 @@ function Table({ data }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((invoice, index) => (
-                        <tr key={index}>
-                            <td>{invoice.tChiTietHdbs.soHdb}</td>
-                            <td>{invoice.tChiTietHdbs.maSp}</td>
-                            <td>{invoice.tChiTietHdbs.slban}</td>
-                            <td>{invoice.tChiTietHdbs.khuyenMai}</td>
-                            <td>0</td>
-                        </tr>
-                    ))}
+                    {data.map((invoice, index) =>
+                        invoice.tChiTietHdbs.map((item) => (
+                            <tr key={index + item.maSp}>
+                                <td>{item.soHdb}</td>
+                                <td>{item.maSp}</td>
+                                <td>{item.slban}</td>
+                                <td>{item.khuyenMai}</td>
+                                <td>0</td>
+                            </tr>
+                        )),
+                    )}
                 </tbody>
             </table>
         </div>

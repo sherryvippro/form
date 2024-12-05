@@ -37,8 +37,6 @@ function Invoice() {
         khuyenMai: '',
     })
 
-    const [formInvoice, setFormInvoice] = useState({})
-
     const fetchData = async () => {
         try {
             setLoading(true)
@@ -68,6 +66,7 @@ function Invoice() {
 
     useEffect(() => {
         checkNewInvoicetId && fetchData()
+        console.log('listInvoice: ', listInvoice)
     }, [checkNewInvoicetId])
 
     const validateForm = () => {
@@ -109,18 +108,18 @@ function Invoice() {
     }
 
     const handleSubmit = async (event) => {
-        console.log('submit')
+        console.log('submitted')
         event.preventDefault()
-        setFormInvoice((prevForm) => ({
-            ...prevForm,
+        const formInvoice = {
             soHdb: invoice.soHdb,
             ngayBan: invoice.ngayBan,
             maNguoiDung: invoice.maNguoiDung,
             tongHdb: invoice.tongHdb,
             tChiTietHdbs: listProduct,
-        }))
+        }
         console.log('invoice detail: ', invoiceDetail)
         console.log('list product: ', listProduct)
+        console.log('formInvoice: ', formInvoice)
 
         try {
             axios.post('http://localhost:5123/invoices', formInvoice)
@@ -140,14 +139,11 @@ function Invoice() {
                 khuyenMai: '',
             })
             setListProduct([])
+            alert('Tạo hóa đơn thành công')
         } catch (error) {
             console.log('Failed to create invoice', error)
         }
     }
-
-    useEffect(() => {
-        console.log('formInvoice updated:', formInvoice)
-    }, [formInvoice])
 
     if (loading) {
         return <p>Loading...</p>
