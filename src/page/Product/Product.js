@@ -33,8 +33,8 @@ function Product() {
         try {
             setLoading(true)
             const [res, resToCreate] = await Promise.all([
-                axios.get('http://localhost:5123/products'),
-                axios.get('http://localhost:5123/products/toCreate'),
+                axios.get('https://localhost:7015/products'),
+                axios.get('https://localhost:7015/products/toCreate'),
             ])
 
             setListProduct(res.data.product)
@@ -96,7 +96,7 @@ function Product() {
 
         try {
             if (Object.keys(formErrors).length === 0) {
-                await axios.post('http://localhost:5123/products', formProduct)
+                await axios.post('https://localhost:7015/products', formProduct)
                 setListProduct((prevProduct) => [...prevProduct, formProduct])
                 setFormProduct({
                     maSp: '',

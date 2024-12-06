@@ -17,6 +17,7 @@ function Form({
     handleChangeCustomerId,
     handleOnClick,
     handleOnDelete,
+    totalPrice,
 }) {
     return (
         <div className={cx('wrapper')}>
@@ -158,8 +159,8 @@ function Form({
                         className={cx('value')}
                         type="number"
                         name="tongHdb"
-                        // readOnly
-                        value={invoice.tongHdb}
+                        disabled
+                        value={totalPrice}
                         onChange={handleChange}
                     />
                 </div>

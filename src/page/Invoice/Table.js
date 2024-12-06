@@ -22,7 +22,7 @@ function Table({ data, title }) {
                         <tbody>
                             <tr key={invoice.soHdb + index}>
                                 <td>{invoice.soHdb}</td>
-                                <td>{invoice.hoten}</td>
+                                <td>{invoice.hoTen}</td>
                                 <td>{invoice.ngayBan}</td>
                                 <td>{invoice.tongHdb}</td>
                             </tr>

@@ -51,8 +51,8 @@ function Invoice() {
         try {
             setLoading(true)
             const [res, resToCreate] = await Promise.all([
-                axios.get('http://localhost:5123/invoices'),
-                axios.get('http://localhost:5123/invoices/toCreate'),
+                axios.get('https://localhost:7015/invoices'),
+                axios.get('https://localhost:7015/invoices/toCreate'),
             ])
             setListInvoice(res.data)
             setdataToCreate({
@@ -159,20 +159,17 @@ function Invoice() {
     const handleOnClick = (event) => {
         event.preventDefault()
         const formErrors = validateFormProduct()
-        const thanhTien =
-            invoiceDetail.donGiaBan * invoiceDetail.slban -
-            (invoiceDetail.donGiaBan * invoiceDetail.slban * invoiceDetail.khuyenMai) / 100
-        const updatedInvoiceDetail = {
-            ...invoiceDetail,
-            thanhTien,
-        }
+
         if (Object.keys(formErrors).length === 0) {
-            setListProduct((prevList) => [...prevList, updatedInvoiceDetail])
-            setTotalPrice((prevTotal) => prevTotal + invoiceDetail.thanhTien)
-            setInvoice((prevInvoice) => ({
-                ...prevInvoice,
-                tongHdb: totalPrice,
-            }))
+            console.log(listProduct.filter((x) => x.maSp === invoiceDetail.maSp))
+
+            if (listProduct.filter((x) => x.maSp === invoiceDetail.maSp).length !== 0) {
+                alert('Trùng mã sản phẩm')
+            } else {
+                invoiceDetail.thanhTien = invoiceDetail.donGiaBan * invoiceDetail.slban
+                setListProduct((prevList) => [...prevList, invoiceDetail])
+            }
+
             setErrors({})
         } else setErrors(formErrors)
     }
@@ -196,7 +193,7 @@ function Invoice() {
             ngayBan: invoice.ngayBan,
             maNguoiDung: invoice.maNguoiDung,
             hoten: invoice.hoten,
-            tongHdb: invoice.tongHdb,
+            tongHdb: totalPrice,
             tChiTietHdbs: listProduct,
         }
 
@@ -206,7 +203,7 @@ function Invoice() {
                 Object.keys(formProductErrors).length === 0 &&
                 listProduct.length > 0
             ) {
-                axios.post('http://localhost:5123/invoices', formInvoice)
+                axios.post('https://localhost:7015/invoices', formInvoice)
                 setSubmittedInfo((prevInfo) => [...prevInfo, formInvoice])
                 setIsOpen(true)
                 setCheckNewInvoicetId(true)
@@ -237,6 +234,11 @@ function Invoice() {
         }
     }
 
+    useEffect(() => {
+        const sum = listProduct.reduce((sum, item) => sum + item.thanhTien, 0)
+        setTotalPrice(sum)
+    }, [listProduct])
+
     if (loading) {
         return <p>Loading...</p>
     }
@@ -260,6 +262,7 @@ function Invoice() {
                     handleOnClick={handleOnClick}
                     handleOnDelete={handleOnDelete}
                     handleSubmit={handleSubmit}
+                    totalPrice={totalPrice}
                 />
             </div>
             <div className={cx('wrapper-table')}>
