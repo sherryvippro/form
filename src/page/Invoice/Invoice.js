@@ -275,7 +275,6 @@ function Invoice() {
                     handleOnClick={handleOnClick}
                     handleOnDelete={handleOnDelete}
                     handleSubmit={handleSubmit}
-                    totalPrice={totalPrice}
                 />
             </div>
             <div className={cx('wrapper-table')}>
