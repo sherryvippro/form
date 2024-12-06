@@ -6,29 +6,31 @@ const cx = classNames.bind(styles)
 function Table({ data, title }) {
     return (
         <div className={cx('wrapper')}>
-            <h4>{title && title === 'Tạo hóa đơn thành công!' ? title : 'Danh sách hóa đơn'}</h4>
+            <h4 className={cx('title')}>
+                {title && title === 'Tạo hóa đơn thành công!' ? title : 'Danh sách hóa đơn'}
+            </h4>
             {data.map((invoice, index) => (
                 <div className={cx('list-invoice')}>
-                    <h4>Hóa đơn số {invoice.soHdb}</h4>
+                    <h4>Hóa đơn số {invoice.invoiceId}</h4>
                     <table className={cx('table')}>
                         <thead>
                             <tr>
                                 <th>Mã hóa đơn</th>
                                 <th>Khách hàng</th>
                                 <th>Ngày bán</th>
-                                <th>Tổng tiền</th>
+                                <th>Tổng tiền (VND)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr key={invoice.soHdb + index}>
-                                <td>{invoice.soHdb}</td>
-                                <td>{invoice.hoten}</td>
-                                <td>{invoice.ngayBan}</td>
-                                <td>{invoice.tongHdb}</td>
+                            <tr key={invoice.invoiceId + index}>
+                                <td>{invoice.invoiceId}</td>
+                                <td>{invoice.fullName}</td>
+                                <td>{invoice.saleDate}</td>
+                                <td>{invoice.totalPrice}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <h4>Chi tiết hóa đơn {invoice.soHdb}</h4>
+                    <h4>Chi tiết hóa đơn {invoice.invoiceId}</h4>
                     <table className={cx('table')}>
                         <thead>
                             <tr>
@@ -36,17 +38,17 @@ function Table({ data, title }) {
                                 <th>Sản phẩm</th>
                                 <th>Số lượng</th>
                                 <th>Khuyến mãi (%) </th>
-                                <th>Thành tiền</th>
+                                <th>Thành tiền (VND)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {invoice.tChiTietHdbs.map((item) => (
-                                <tr key={invoice.soHdb + item.maSp}>
-                                    <td>{item.soHdb}</td>
-                                    <td className={cx('product-name')}>{item.tenSp}</td>
-                                    <td>{item.slban}</td>
-                                    <td>{item.khuyenMai}</td>
-                                    <td>{item.thanhTien}</td>
+                            {invoice.invoiceDetails.map((item) => (
+                                <tr key={invoice.invoiceId + item.productId}>
+                                    <td>{item.invoiceId}</td>
+                                    <td className={cx('product-name')}>{item.productName}</td>
+                                    <td>{item.saleQuantity}</td>
+                                    <td>{item.discount}</td>
+                                    <td>{item.price}</td>
                                 </tr>
                             ))}
                         </tbody>

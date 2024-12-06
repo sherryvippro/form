@@ -28,21 +28,21 @@ function Invoice() {
     const [errors, setErrors] = useState({})
     const [invoiceErrors, setInvoiceErrors] = useState({})
     const [invoice, setInvoice] = useState({
-        soHdb: '',
-        maNguoiDung: '',
-        hoten: '',
-        ngayBan: '',
-        tongHdb: '',
-        tChiTietHdbs: '',
+        invoiceId: '',
+        userId: '',
+        fullName: '',
+        saleDate: '',
+        totalPrice: '',
+        invoiceDetails: '',
     })
     const [invoiceDetail, setInvoiceDetail] = useState({
-        soHdb: invoice.soHdb,
-        maSp: '',
-        tenSp: '',
-        donGiaBan: '',
-        slban: '',
-        khuyenMai: '',
-        thanhTien: '',
+        invoiceId: invoice.invoiceId,
+        productId: '',
+        productName: '',
+        salePrice: '',
+        saleQuantity: '',
+        discount: '',
+        price: '',
     })
     const [submittedInfo, setSubmittedInfo] = useState([])
     const [totalPrice, setTotalPrice] = useState(0)
@@ -63,8 +63,8 @@ function Invoice() {
             })
             setInvoice((prevInvoice) => ({
                 ...prevInvoice,
-                soHdb: resToCreate.data.invoiceId,
-                ngayBan: resToCreate.data.datetime,
+                invoiceId: resToCreate.data.invoiceId,
+                saleDate: resToCreate.data.datetime,
             }))
             setCheckNewInvoicetId(false)
         } catch (error) {
@@ -78,24 +78,29 @@ function Invoice() {
         checkNewInvoicetId && fetchData()
     }, [checkNewInvoicetId])
 
+    useEffect(() => {
+        const totalPrice = listProduct.reduce((total, product) => total + product.price, 0)
+        setTotalPrice(totalPrice)
+    }, [listProduct])
+
     const validateFormProduct = () => {
         const newErrors = {}
-        if (invoiceDetail.maSp === '') {
-            newErrors.maSp = 'Vui lòng chọn sản phẩm'
+        if (invoiceDetail.productId === '') {
+            newErrors.productId = 'Vui lòng chọn sản phẩm'
         }
-        if (invoiceDetail.slban === '') {
-            newErrors.slban = 'Vui lòng nhập số lượng'
+        if (invoiceDetail.saleQuantity === '') {
+            newErrors.saleQuantity = 'Vui lòng nhập số lượng'
         }
-        if (invoiceDetail.khuyenMai === '') {
-            newErrors.khuyenMai = 'Vui lòng nhập mức giảm giá'
+        if (invoiceDetail.discount === '') {
+            newErrors.discount = 'Vui lòng nhập mức giảm giá'
         }
         return newErrors
     }
 
     const validateFormInvocie = () => {
         const newErrors = {}
-        if (invoice.maNguoiDung === '') {
-            newErrors.maNguoiDung = 'Vui lòng chọn khách hàng'
+        if (invoice.userId === '') {
+            newErrors.userId = 'Vui lòng chọn khách hàng'
         }
         return newErrors
     }
@@ -105,7 +110,7 @@ function Invoice() {
         setInvoiceDetail((prevForm) => ({
             ...prevForm,
             [name]: value,
-            soHdb: invoice.soHdb,
+            invoiceId: invoice.invoiceId,
         }))
         setInvoice((prevInvoice) => ({
             ...prevInvoice,
@@ -118,67 +123,70 @@ function Invoice() {
         const productId = event.target.value
         setInvoiceDetail((prevForm) => ({
             ...prevForm,
-            maSp: productId,
+            productId: productId,
         }))
 
-        const product = dataToCreate.products.find((p) => p.maSp === productId)
+        const product = dataToCreate.products.find((p) => p.productId === productId)
         if (product) {
             setInvoiceDetail((prevForm) => ({
                 ...prevForm,
-                tenSp: product.tenSp,
-                donGiaBan: product.donGiaBan,
+                productName: product.productName,
+                salePrice: product.salePrice,
             }))
         } else {
             setInvoiceDetail((prevForm) => ({
                 ...prevForm,
-                donGiaBan: 0,
+                salePrice: 0,
             }))
         }
+        setErrors({})
     }
 
     const handleChangeCustomerId = async (event) => {
         const customerId = event.target.value
         setInvoice((prevInvoice) => ({
             ...prevInvoice,
-            maNguoiDung: customerId,
+            userId: customerId,
         }))
-        const customer = dataToCreate.customers.find((c) => c.maNguoiDung === parseInt(customerId))
+        const customer = dataToCreate.customers.find((c) => c.userId === parseInt(customerId))
         if (customer) {
             setInvoice((prevInvoice) => ({
                 ...prevInvoice,
-                hoten: customer.hoten,
+                fullName: customer.fullName,
             }))
         } else {
             setInvoice((prevInvoice) => ({
                 ...prevInvoice,
-                hoten: '',
+                fullName: '',
             }))
         }
+        setInvoiceErrors({})
     }
 
     const handleOnClick = (event) => {
         event.preventDefault()
         const formErrors = validateFormProduct()
-        const thanhTien =
-            invoiceDetail.donGiaBan * invoiceDetail.slban -
-            (invoiceDetail.donGiaBan * invoiceDetail.slban * invoiceDetail.khuyenMai) / 100
-        const updatedInvoiceDetail = {
-            ...invoiceDetail,
-            thanhTien,
-        }
+
         if (Object.keys(formErrors).length === 0) {
-            setListProduct((prevList) => [...prevList, updatedInvoiceDetail])
-            setTotalPrice((prevTotal) => prevTotal + invoiceDetail.thanhTien)
-            setInvoice((prevInvoice) => ({
-                ...prevInvoice,
-                tongHdb: totalPrice,
-            }))
+            if (
+                listProduct.filter((product) => product.productId === invoiceDetail.productId)
+                    .length !== 0
+            ) {
+                alert('Sản phẩm đã được thêm vào hóa đơn!')
+            } else {
+                invoiceDetail.price =
+                    (invoiceDetail.salePrice *
+                        invoiceDetail.saleQuantity *
+                        (100 - invoiceDetail.discount)) /
+                    100
+                setListProduct((prevList) => [...prevList, invoiceDetail])
+            }
             setErrors({})
         } else setErrors(formErrors)
     }
 
-    const handleOnDelete = (maSp) => {
-        setListProduct((prevList) => prevList.filter((product) => product.maSp !== maSp))
+    const handleOnDelete = (productId) => {
+        setListProduct((prevList) => prevList.filter((product) => product.productId !== productId))
     }
 
     const closeModal = () => {
@@ -187,43 +195,44 @@ function Invoice() {
     }
 
     const handleSubmit = async (event) => {
-        console.log('submitted')
         event.preventDefault()
         const formInvoiceErrors = validateFormInvocie()
         const formProductErrors = validateFormProduct()
         const formInvoice = {
-            soHdb: invoice.soHdb,
-            ngayBan: invoice.ngayBan,
-            maNguoiDung: invoice.maNguoiDung,
-            hoten: invoice.hoten,
-            tongHdb: invoice.tongHdb,
-            tChiTietHdbs: listProduct,
+            invoiceId: invoice.invoiceId,
+            saleDate: invoice.saleDate,
+            userId: invoice.userId,
+            fullName: invoice.fullName,
+            totalPrice: totalPrice,
+            invoiceDetails: listProduct,
         }
 
         try {
-            if (
+            if (listProduct.length === 0) {
+                alert('Vui lòng thêm sản phẩm vào hóa đơn!')
+            } else if (
                 Object.keys(formInvoiceErrors).length === 0 &&
                 Object.keys(formProductErrors).length === 0 &&
                 listProduct.length > 0
             ) {
-                axios.post('http://localhost:5123/invoices', formInvoice)
+                await axios.post('http://localhost:5123/invoices', formInvoice)
                 setSubmittedInfo((prevInfo) => [...prevInfo, formInvoice])
                 setIsOpen(true)
                 setCheckNewInvoicetId(true)
                 setListInvoice((prevInvoice) => [...prevInvoice, formInvoice])
                 setInvoice({
-                    soHdb: '',
-                    maNguoiDung: '',
-                    ngayBan: '',
-                    tongHdb: '',
-                    tChiTietHdbs: '',
+                    invoiceId: '',
+                    userId: '',
+                    saleDate: '',
+                    totalPrice: '',
+                    invoiceDetails: '',
                 })
                 setInvoiceDetail({
-                    maSp: '',
-                    tenSp: '',
-                    donGiaBan: '',
-                    slban: '',
-                    khuyenMai: '',
+                    productId: '',
+                    productName: '',
+                    salePrice: '',
+                    saleQuantity: '',
+                    discount: '',
                 })
                 setListProduct([])
                 setErrors({})
@@ -251,6 +260,7 @@ function Invoice() {
                     listProduct={listProduct}
                     invoice={invoice}
                     invoiceDetail={invoiceDetail}
+                    totalPrice={totalPrice}
                     errors={errors}
                     invoiceErrors={invoiceErrors}
                     dataToCreate={dataToCreate}

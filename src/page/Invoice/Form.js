@@ -8,6 +8,7 @@ function Form({
     listProduct,
     invoice,
     invoiceDetail,
+    totalPrice,
     errors,
     invoiceErrors,
     dataToCreate,
@@ -20,43 +21,104 @@ function Form({
 }) {
     return (
         <div className={cx('wrapper')}>
+            <div className={cx('invoice')}>
+                <div className={cx('row')}>
+                    <label className={cx('text')}>Mã hóa đơn</label>
+                    <input
+                        className={cx('value')}
+                        type="text"
+                        name="invoiceId"
+                        readOnly
+                        value={dataToCreate.invoiceId}
+                    />
+                </div>
+                <div className={cx('row')}>
+                    <label className={cx('text')}>Ngày lập</label>
+                    <input
+                        className={cx('value')}
+                        type="text"
+                        name="saleDate"
+                        readOnly
+                        value={dataToCreate.datetime}
+                    />
+                </div>
+                <div className={cx('row')}>
+                    <label className={cx('text')}>Tên khách hàng</label>
+                    <select
+                        className={cx('value')}
+                        name="userId"
+                        value={invoice.userId}
+                        onChange={handleChangeCustomerId}
+                    >
+                        <option value="">Chọn khách hàng</option>
+                        {dataToCreate.customers.map((customer) => (
+                            <option key={customer.userId} value={customer.userId}>
+                                {customer.fullName}
+                            </option>
+                        ))}
+                    </select>
+                    {invoiceErrors.userId && <p style={{ color: 'red' }}>{invoiceErrors.userId}</p>}
+                </div>
+                <div className={cx('row')}>
+                    <label className={cx('text')}>Tổng tiền (VND)</label>
+                    <input
+                        className={cx('value')}
+                        type="number"
+                        name="totalPrice"
+                        readOnly
+                        value={totalPrice}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className={cx('button')}>
+                    <button onClick={handleSubmit} type="submit">
+                        Thêm
+                    </button>
+                </div>
+            </div>
             <div className={cx('product-form')}>
                 <div className={cx('product-add')}>
                     <div className={cx('row')}>
                         <label className={cx('text')}>Sản phẩm</label>
                         <select
                             className={cx('value')}
-                            name="maSp"
-                            value={invoiceDetail.maSp}
+                            name="productId"
+                            value={invoiceDetail.productId}
                             onChange={handleChangeProductId}
                         >
                             <option value="">Chọn sản phẩm</option>
                             {dataToCreate.products.map((product) => (
-                                <option key={product.maSp} value={product.maSp}>
-                                    {product.tenSp}
+                                <option key={product.productId} value={product.productId}>
+                                    {product.productName}
                                 </option>
                             ))}
                         </select>
-                        {errors.maSp && <p style={{ color: 'red' }}>{errors.maSp}</p>}
+                        {errors.productId && <p style={{ color: 'red' }}>{errors.productId}</p>}
                     </div>
                     <div className={cx('row')}>
                         <label className={cx('text')}>Số lượng</label>
                         <input
                             className={cx('value')}
                             type="number"
-                            name="slban"
-                            value={invoiceDetail.slban}
+                            name="saleQuantity"
+                            value={invoiceDetail.saleQuantity}
                             onChange={handleChange}
+                            min="1"
+                            onKeyDown={(e) => {
+                                if (e.key === '-') e.preventDefault()
+                            }}
                         />
-                        {errors.slban && <p style={{ color: 'red' }}>{errors.slban}</p>}
+                        {errors.saleQuantity && (
+                            <p style={{ color: 'red' }}>{errors.saleQuantity}</p>
+                        )}
                     </div>
                     <div className={cx('row')}>
-                        <label className={cx('text')}>Đơn giá</label>
+                        <label className={cx('text')}>Đơn giá (VND)</label>
                         <input
                             className={cx('value')}
                             type="number"
-                            value={invoiceDetail.donGiaBan}
-                            name="donGiaBan"
+                            value={invoiceDetail.salePrice}
+                            name="salePrice"
                             readOnly
                             onChange={handleChange}
                         />
@@ -66,11 +128,15 @@ function Form({
                         <input
                             className={cx('value')}
                             type="number"
-                            name="khuyenMai"
-                            value={invoiceDetail.khuyenMai}
+                            name="discount"
+                            value={invoiceDetail.discount}
                             onChange={handleChange}
+                            min="0"
+                            onKeyDown={(e) => {
+                                if (e.key === '-') e.preventDefault()
+                            }}
                         />
-                        {errors.khuyenMai && <p style={{ color: 'red' }}>{errors.khuyenMai}</p>}
+                        {errors.discount && <p style={{ color: 'red' }}>{errors.discount}</p>}
                     </div>
                     <div className={cx('row')}>
                         <button className={cx('btn-add')} onClick={handleOnClick}>
@@ -88,21 +154,21 @@ function Form({
                                 <th>Giá bán</th>
                                 <th>Số lượng</th>
                                 <th>Khuyến mãi (%)</th>
-                                <th>Thành tiền</th>
+                                <th>Thành tiền (VND)</th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
                         {listProduct.map((product) => (
-                            <tbody key={product.maSp}>
+                            <tbody key={product.productId}>
                                 <tr>
-                                    <td>{product.maSp}</td>
-                                    <td className={cx('product-name')}>{product.tenSp}</td>
-                                    <td>{product.donGiaBan}</td>
-                                    <td>{product.slban}</td>
-                                    <td>{product.khuyenMai}</td>
-                                    <td>{product.thanhTien}</td>
+                                    <td>{product.productId}</td>
+                                    <td className={cx('product-name')}>{product.productName}</td>
+                                    <td>{product.salePrice}</td>
+                                    <td>{product.saleQuantity}</td>
+                                    <td>{product.discount}</td>
+                                    <td>{product.price}</td>
                                     <td>
-                                        <button onClick={() => handleOnDelete(product.maSp)}>
+                                        <button onClick={() => handleOnDelete(product.productId)}>
                                             Xóa
                                         </button>
                                     </td>
@@ -110,63 +176,6 @@ function Form({
                             </tbody>
                         ))}
                     </table>
-                </div>
-            </div>
-            <div className={cx('invoice')}>
-                <div className={cx('row')}>
-                    <label className={cx('text')}>Mã hóa đơn</label>
-                    <input
-                        className={cx('value')}
-                        type="text"
-                        name="soHdb"
-                        readOnly
-                        value={dataToCreate.invoiceId}
-                    />
-                </div>
-                <div className={cx('row')}>
-                    <label className={cx('text')}>Ngày lập</label>
-                    <input
-                        className={cx('value')}
-                        type="text"
-                        name="ngayBan"
-                        readOnly
-                        value={dataToCreate.datetime}
-                    />
-                </div>
-                <div className={cx('row')}>
-                    <label className={cx('text')}>Tên khách hàng</label>
-                    <select
-                        className={cx('value')}
-                        name="maNguoiDung"
-                        value={invoice.maNguoiDung}
-                        onChange={handleChangeCustomerId}
-                    >
-                        <option value="">Chọn khách hàng</option>
-                        {dataToCreate.customers.map((customer) => (
-                            <option key={customer.maNguoiDung} value={customer.maNguoiDung}>
-                                {customer.hoten}
-                            </option>
-                        ))}
-                    </select>
-                    {invoiceErrors.maNguoiDung && (
-                        <p style={{ color: 'red' }}>{invoiceErrors.maNguoiDung}</p>
-                    )}
-                </div>
-                <div className={cx('row')}>
-                    <label className={cx('text')}>Tổng tiền</label>
-                    <input
-                        className={cx('value')}
-                        type="number"
-                        name="tongHdb"
-                        // readOnly
-                        value={invoice.tongHdb}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className={cx('button')}>
-                    <button onClick={handleSubmit} type="submit">
-                        Thêm
-                    </button>
                 </div>
             </div>
         </div>

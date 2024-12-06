@@ -12,24 +12,29 @@ function Table({ data }) {
                         <th>Mã sản phẩm</th>
                         <th>Tên sản phẩm</th>
                         <th>Danh mục</th>
-                        <th>Nhà cung cấp</th>
-                        <th>Giá nhập</th>
-                        <th>Giá bán</th>
+                        <th>Hãng sản xuất</th>
+                        <th>Giá nhập (VND)</th>
+                        <th>Giá bán (VND)</th>
                         <th>Số lượng</th>
                         <th>Hình ảnh</th>
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((product) => (
-                        <tr key={product.maSp}>
-                            <td>{product.maSp}</td>
-                            <td className={cx('product-name')}>{product.tenSp}</td>
-                            <td>{product.tenTl}</td>
-                            <td>{product.tenHang}</td>
-                            <td>{product.donGiaNhap}</td>
-                            <td>{product.donGiaBan}</td>
-                            <td>{product.soLuong}</td>
-                            <td>{product.anh}</td>
+                        <tr key={product.productId}>
+                            <td>{product.productId}</td>
+                            <td className={cx('product-name')}>{product.productName}</td>
+                            <td>{product.categoryName}</td>
+                            <td>{product.manufacturerName}</td>
+                            <td>{product.inPrice}</td>
+                            <td>{product.salePrice}</td>
+                            <td>{product.quantity}</td>
+                            <td>
+                                <img
+                                    src={`assets/images/${product.image}`}
+                                    alt={product.productName}
+                                />
+                            </td>
                         </tr>
                     ))}
                 </tbody>

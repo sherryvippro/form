@@ -4,10 +4,23 @@
     width: 80%;
 }
 
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
 .list-invoice {
-    margin-top: 50px;
+    margin-bottom: 50px;
+    border: 1px solid #9f9f9f;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .product-name {
     word-break: break-word;
+}
+
+img {
+    width: 100px;
 }

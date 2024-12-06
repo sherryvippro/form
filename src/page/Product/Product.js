@@ -19,14 +19,14 @@ function Product() {
         suppliers: [],
     })
     const [formProduct, setFormProduct] = useState({
-        maSp: '',
-        tenSp: '',
-        maTl: '',
-        maHang: '',
-        donGiaNhap: '',
-        donGiaBan: '',
-        soLuong: '',
-        anh: '',
+        productId: '',
+        productName: '',
+        categoryId: '',
+        manufacturerId: '',
+        inPrice: '',
+        salePrice: '',
+        quantity: '',
+        image: '',
     })
 
     const fetchData = async () => {
@@ -44,7 +44,7 @@ function Product() {
             })
             setFormProduct((prevForm) => ({
                 ...prevForm,
-                maSp: resToCreate.data.productId,
+                productId: resToCreate.data.productId,
             }))
             setCheckNewProductId(false)
         } catch (error) {
@@ -60,23 +60,23 @@ function Product() {
 
     const validateForm = () => {
         const newErrors = {}
-        if (formProduct.tenSp === '') {
-            newErrors.tenSp = 'Tên sản phẩm không được  để trống'
+        if (formProduct.productName === '') {
+            newErrors.productName = 'Tên sản phẩm không được  để trống'
         }
-        if (formProduct.maTl === '') {
-            newErrors.maTl = 'Danh mục không được để trống'
+        if (formProduct.categoryId === '') {
+            newErrors.categoryId = 'Danh mục không được để trống'
         }
-        if (formProduct.maHang === '') {
-            newErrors.maHang = 'Nhà cung cấp không được để trống'
+        if (formProduct.manufacturerId === '') {
+            newErrors.manufacturerId = 'Nhà cung cấp không được để trống'
         }
-        if (formProduct.donGiaNhap === '') {
-            newErrors.donGiaNhap = 'Giá nhập không được để trống'
+        if (formProduct.inPrice === '') {
+            newErrors.inPrice = 'Giá nhập không được để trống'
         }
-        if (formProduct.donGiaBan === '') {
-            newErrors.donGiaBan = 'Giá bán không được để trống'
+        if (formProduct.salePrice === '') {
+            newErrors.salePrice = 'Giá bán không được để trống'
         }
-        if (formProduct.soLuong === '') {
-            newErrors.soLuong = 'Số lượng không được để trống'
+        if (formProduct.quantity === '') {
+            newErrors.quantity = 'Số lượng không được để trống'
         }
         return newErrors
     }
@@ -90,28 +90,35 @@ function Product() {
         setErrors({})
     }
 
+    const handleChangeFile = (event) => {
+        const fileName = event.target.files[0].name
+        setFormProduct((prevForm) => ({
+            ...prevForm,
+            image: fileName,
+        }))
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault()
         const formErrors = validateForm()
+        console.log('file name: ', formProduct.image)
 
         try {
             if (Object.keys(formErrors).length === 0) {
                 await axios.post('http://localhost:5123/products', formProduct)
                 setListProduct((prevProduct) => [...prevProduct, formProduct])
                 setFormProduct({
-                    maSp: '',
-                    tenSp: '',
-                    maTl: '',
-                    maHang: '',
-                    donGiaNhap: '',
-                    donGiaBan: '',
-                    soLuong: '',
-                    anh: '',
+                    productId: '',
+                    productName: '',
+                    categoryId: '',
+                    manufacturerId: '',
+                    inPrice: '',
+                    salePrice: '',
+                    quantity: '',
+                    image: '',
                 })
                 setCheckNewProductId(true)
                 setErrors({})
-                console.log('formProduct: ', formProduct)
-                console.log('listProduct: ', listProduct)
             } else {
                 setErrors(formErrors)
             }
@@ -136,6 +143,7 @@ function Product() {
                     dataToCreate={dataToCreate}
                     handleChange={handleChange}
                     handleSubmit={handleSubmit}
+                    handleChangeFile={handleChangeFile}
                 />
             </div>
             <div className={cx('wrapper-table')}>

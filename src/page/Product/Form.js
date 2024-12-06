@@ -3,7 +3,7 @@ import styles from './Form.module.scss'
 
 const cx = classNames.bind(styles)
 
-function Form({ form, errors, dataToCreate, handleChange, handleSubmit }) {
+function Form({ form, errors, dataToCreate, handleChange, handleSubmit, handleChangeFile }) {
     return (
         <div className={cx('wrapper')}>
             <form className={cx('form')}>
@@ -12,9 +12,9 @@ function Form({ form, errors, dataToCreate, handleChange, handleSubmit }) {
                     <input
                         className={cx('value')}
                         type="text"
-                        name="maSp"
+                        name="productId"
                         readOnly
-                        value={form.maSp || ''}
+                        value={form.productId || ''}
                     />
                 </div>
                 <div className={cx('row')}>
@@ -22,88 +22,95 @@ function Form({ form, errors, dataToCreate, handleChange, handleSubmit }) {
                     <input
                         className={cx('value')}
                         type="text"
-                        name="tenSp"
+                        name="productName"
                         required
-                        value={form.tenSp}
+                        value={form.productName}
                         onChange={handleChange}
                     />
-                    {errors.tenSp && <p style={{ color: 'red' }}>{errors.tenSp}</p>}
+                    {errors.productName && <p style={{ color: 'red' }}>{errors.productName}</p>}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Danh mục</label>
                     <select
                         className={cx('value')}
-                        name="maTl"
+                        name="categoryId"
                         required
-                        value={form.maTl}
+                        value={form.categoryId}
                         onChange={handleChange}
                     >
                         <option value="">Chọn danh mục</option>
                         {dataToCreate.categories.map((category) => (
-                            <option key={category.maTl} value={category.maTl}>
-                                {category.tenTl}
+                            <option key={category.categoryId} value={category.categoryId}>
+                                {category.categoryName}
                             </option>
                         ))}
                     </select>
-                    {errors.maTl && <p style={{ color: 'red' }}>{errors.maTl}</p>}
+                    {errors.categoryId && <p style={{ color: 'red' }}>{errors.categoryId}</p>}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Nhà cung cấp</label>
                     <select
                         className={cx('value')}
-                        name="maHang"
+                        name="manufacturerId"
                         required
-                        value={form.maHang}
+                        value={form.manufacturerId}
                         onChange={handleChange}
                     >
                         <option value="">Chọn nhà cung cấp</option>
                         {dataToCreate.suppliers.map((supplier) => (
-                            <option key={supplier.maHang} value={supplier.maHang}>
-                                {supplier.tenHang}
+                            <option key={supplier.manufacturerId} value={supplier.manufacturerId}>
+                                {supplier.manufacturerName}
                             </option>
                         ))}
                     </select>
-                    {errors.maHang && <p style={{ color: 'red' }}>{errors.maHang}</p>}
+                    {errors.manufacturerId && (
+                        <p style={{ color: 'red' }}>{errors.manufacturerId}</p>
+                    )}
                 </div>
                 <div className={cx('row')}>
-                    <label className={cx('text')}>Giá nhập</label>
+                    <label className={cx('text')}>Giá nhập (VND)</label>
                     <input
                         className={cx('value')}
-                        name="donGiaNhap"
+                        name="inPrice"
                         type="text"
                         required
-                        value={form.donGiaNhap}
+                        value={form.inPrice}
                         onChange={handleChange}
                     />
-                    {errors.donGiaNhap && <p style={{ color: 'red' }}>{errors.donGiaNhap}</p>}
+                    {errors.inPrice && <p style={{ color: 'red' }}>{errors.inPrice}</p>}
                 </div>
                 <div className={cx('row')}>
-                    <label className={cx('text')}>Giá bán</label>
+                    <label className={cx('text')}>Giá bán (VND)</label>
                     <input
                         className={cx('value')}
                         type="text"
-                        name="donGiaBan"
+                        name="salePrice"
                         required
-                        value={form.donGiaBan}
+                        value={form.salePrice}
                         onChange={handleChange}
                     />
-                    {errors.donGiaBan && <p style={{ color: 'red' }}>{errors.donGiaBan}</p>}
+                    {errors.salePrice && <p style={{ color: 'red' }}>{errors.salePrice}</p>}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Số lượng</label>
                     <input
                         className={cx('value')}
                         type="number"
-                        name="soLuong"
+                        name="quantity"
                         required
-                        value={form.soLuong}
+                        value={form.quantity}
                         onChange={handleChange}
                     />
-                    {errors.soLuong && <p style={{ color: 'red' }}>{errors.soLuong}</p>}
+                    {errors.quantity && <p style={{ color: 'red' }}>{errors.quantity}</p>}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Hình ảnh</label>
-                    <input className={cx('value')} type="file" name="anh" />
+                    <input
+                        className={cx('value')}
+                        type="file"
+                        name="image"
+                        onChange={handleChangeFile}
+                    />
                 </div>
                 <div className={cx('button')}>
                     <button onClick={handleSubmit} type="submit">
