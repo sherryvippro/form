@@ -51,8 +51,8 @@ function Invoice() {
         try {
             setLoading(true)
             const [res, resToCreate] = await Promise.all([
-                axios.get('http://localhost:5123/invoices'),
-                axios.get('http://localhost:5123/invoices/toCreate'),
+                axios.get('https://localhost:7015/invoices'),
+                axios.get('https://localhost:7015/invoices/toCreate'),
             ])
             setListInvoice(res.data)
             setdataToCreate({
@@ -246,6 +246,11 @@ function Invoice() {
         }
     }
 
+    useEffect(() => {
+        const sum = listProduct.reduce((sum, item) => sum + item.thanhTien, 0)
+        setTotalPrice(sum)
+    }, [listProduct])
+
     if (loading) {
         return <p>Loading...</p>
     }
@@ -270,6 +275,7 @@ function Invoice() {
                     handleOnClick={handleOnClick}
                     handleOnDelete={handleOnDelete}
                     handleSubmit={handleSubmit}
+                    totalPrice={totalPrice}
                 />
             </div>
             <div className={cx('wrapper-table')}>

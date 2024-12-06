@@ -18,6 +18,7 @@ function Form({
     handleChangeCustomerId,
     handleOnClick,
     handleOnDelete,
+    totalPrice,
 }) {
     return (
         <div className={cx('wrapper')}>
