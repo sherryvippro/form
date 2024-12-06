@@ -5,6 +5,7 @@ const cx = classNames.bind(styles)
 function Table({ data }) {
     return (
         <div className={cx('wrapper')}>
+            <h4>Danh sách sản phẩm</h4>
             <table className={cx('table')}>
                 <thead>
                     <tr>
@@ -22,7 +23,7 @@ function Table({ data }) {
                     {data.map((product) => (
                         <tr key={product.maSp}>
                             <td>{product.maSp}</td>
-                            <td>{product.tenSp}</td>
+                            <td className={cx('product-name')}>{product.tenSp}</td>
                             <td>{product.tenTl}</td>
                             <td>{product.tenHang}</td>
                             <td>{product.donGiaNhap}</td>

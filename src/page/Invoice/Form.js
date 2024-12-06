@@ -9,106 +9,114 @@ function Form({
     invoice,
     invoiceDetail,
     errors,
+    invoiceErrors,
     dataToCreate,
     handleSubmit,
     handleChange,
+    handleChangeProductId,
+    handleChangeCustomerId,
     handleOnClick,
     handleOnDelete,
 }) {
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('product-add')}>
-                <div className={cx('row')}>
-                    <label className={cx('text')}>Sản phẩm</label>
-                    <select
-                        className={cx('value')}
-                        name="maSp"
-                        value={invoiceDetail.maSp}
-                        onChange={handleChange}
-                    >
-                        <option value="">Chọn sản phẩm</option>
-                        {dataToCreate.products.map((product) => (
-                            <option key={product.maSp} value={product.maSp}>
-                                {product.tenSp}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.tenSp && <p style={{ color: 'red' }}>{errors.tenSp}</p>}
+            <div className={cx('product-form')}>
+                <div className={cx('product-add')}>
+                    <div className={cx('row')}>
+                        <label className={cx('text')}>Sản phẩm</label>
+                        <select
+                            className={cx('value')}
+                            name="maSp"
+                            value={invoiceDetail.maSp}
+                            onChange={handleChangeProductId}
+                        >
+                            <option value="">Chọn sản phẩm</option>
+                            {dataToCreate.products.map((product) => (
+                                <option key={product.maSp} value={product.maSp}>
+                                    {product.tenSp}
+                                </option>
+                            ))}
+                        </select>
+                        {errors.maSp && <p style={{ color: 'red' }}>{errors.maSp}</p>}
+                    </div>
+                    <div className={cx('row')}>
+                        <label className={cx('text')}>Số lượng</label>
+                        <input
+                            className={cx('value')}
+                            type="number"
+                            name="slban"
+                            value={invoiceDetail.slban}
+                            onChange={handleChange}
+                        />
+                        {errors.slban && <p style={{ color: 'red' }}>{errors.slban}</p>}
+                    </div>
+                    <div className={cx('row')}>
+                        <label className={cx('text')}>Đơn giá</label>
+                        <input
+                            className={cx('value')}
+                            type="number"
+                            value={invoiceDetail.donGiaBan}
+                            name="donGiaBan"
+                            readOnly
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className={cx('row')}>
+                        <label className={cx('text')}>Khuyến mãi (%)</label>
+                        <input
+                            className={cx('value')}
+                            type="number"
+                            name="khuyenMai"
+                            value={invoiceDetail.khuyenMai}
+                            onChange={handleChange}
+                        />
+                        {errors.khuyenMai && <p style={{ color: 'red' }}>{errors.khuyenMai}</p>}
+                    </div>
+                    <div className={cx('row')}>
+                        <button className={cx('btn-add')} onClick={handleOnClick}>
+                            Thêm
+                        </button>
+                    </div>
                 </div>
-                <div className={cx('row')}>
-                    <label className={cx('text')}>Số lượng</label>
-                    <input
-                        className={cx('value')}
-                        type="number"
-                        name="slban"
-                        value={invoiceDetail.slban}
-                        onChange={handleChange}
-                    />
-                    {errors.slban && <p style={{ color: 'red' }}>{errors.slban}</p>}
-                </div>
-                <div className={cx('row')}>
-                    <label className={cx('text')}>Đơn giá</label>
-                    <input
-                        className={cx('value')}
-                        type="number"
-                        value={invoiceDetail.donGiaBan}
-                        name="donGiaBan"
-                        onChange={handleChange}
-                    />
-                    {errors.donGiaBan && <p style={{ color: 'red' }}>{errors.donGiaBan}</p>}
-                </div>
-                <div className={cx('row')}>
-                    <label className={cx('text')}>Khuyến mãi</label>
-                    <input
-                        className={cx('value')}
-                        type="number"
-                        name="khuyenMai"
-                        value={invoiceDetail.khuyenMai}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className={cx('row')}>
-                    <button className={cx('btn-add')} onClick={handleOnClick}>
-                        Thêm
-                    </button>
-                </div>
-            </div>
 
-            <div className={cx('product-list')}>
-                <table className={cx('table')}>
-                    <thead>
-                        <tr>
-                            <th>Mã sản phẩm</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Giá bán</th>
-                            <th>Số lượng</th>
-                            <th>Khuyến mãi (%)</th>
-                            <th>Thành tiền</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    {listProduct.map((product) => (
-                        <tbody key={product.maSp}>
+                <div className={cx('product-list')}>
+                    <table className={cx('table')}>
+                        <thead>
                             <tr>
-                                <td>{product.maSp}</td>
-                                <td>{product.tenSp}</td>
-                                <td>{product.donGiaBan}</td>
-                                <td>{product.slban}</td>
-                                <td>{product.khuyenMai}</td>
-                                <td>
-                                    {product.donGiaBan * product.slban -
-                                        (product.donGiaBan * product.slban * product.khuyenMai) /
-                                            100}
-                                </td>
-                                <td>
-                                    <button onClick={() => handleOnDelete(product.maSp)}>
-                                        Xóa
-                                    </button>
-                                </td>
+                                <th>Mã sản phẩm</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá bán</th>
+                                <th>Số lượng</th>
+                                <th>Khuyến mãi (%)</th>
+                                <th>Thành tiền</th>
+                                <th>Thao tác</th>
                             </tr>
-                        </tbody>
-                    ))}
-                </table>
+                        </thead>
+                        {listProduct.map((product) => (
+                            <tbody key={product.maSp}>
+                                <tr>
+                                    <td>{product.maSp}</td>
+                                    <td className={cx('product-name')}>{product.tenSp}</td>
+                                    <td>{product.donGiaBan}</td>
+                                    <td>{product.slban}</td>
+                                    <td>{product.khuyenMai}</td>
+                                    <td>
+                                        {product.donGiaBan * product.slban -
+                                            (product.donGiaBan *
+                                                product.slban *
+                                                product.khuyenMai) /
+                                                100}
+                                    </td>
+                                    <td>
+                                        <button onClick={() => handleOnDelete(product.maSp)}>
+                                            Xóa
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        ))}
+                    </table>
+                </div>
             </div>
             <div className={cx('invoice')}>
                 <div className={cx('row')}>
@@ -137,7 +145,7 @@ function Form({
                         className={cx('value')}
                         name="maNguoiDung"
                         value={invoice.maNguoiDung}
-                        onChange={handleChange}
+                        onChange={handleChangeCustomerId}
                     >
                         <option value="">Chọn khách hàng</option>
                         {dataToCreate.customers.map((customer) => (
@@ -146,15 +154,17 @@ function Form({
                             </option>
                         ))}
                     </select>
-                    {errors.hoten && <p style={{ color: 'red' }}>{errors.hoten}</p>}
+                    {invoiceErrors.maNguoiDung && (
+                        <p style={{ color: 'red' }}>{invoiceErrors.maNguoiDung}</p>
+                    )}
                 </div>
                 <div className={cx('row')}>
                     <label className={cx('text')}>Tổng tiền</label>
                     <input
                         className={cx('value')}
-                        type="text"
+                        type="number"
                         name="tongHdb"
-                        // readOnly
+                        readOnly
                         value={invoice.tongHdb}
                         onChange={handleChange}
                     />

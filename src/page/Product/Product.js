@@ -87,14 +87,16 @@ function Product() {
             ...prevForm,
             [name]: value,
         }))
+        setErrors({})
     }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
         const formErrors = validateForm()
+
         try {
             if (Object.keys(formErrors).length === 0) {
-                axios.post('http://localhost:5123/products', formProduct)
+                await axios.post('http://localhost:5123/products', formProduct)
                 setListProduct((prevProduct) => [...prevProduct, formProduct])
                 setFormProduct({
                     maSp: '',
@@ -108,6 +110,8 @@ function Product() {
                 })
                 setCheckNewProductId(true)
                 setErrors({})
+                console.log('formProduct: ', formProduct)
+                console.log('listProduct: ', listProduct)
             } else {
                 setErrors(formErrors)
             }
@@ -122,6 +126,9 @@ function Product() {
 
     return (
         <div className={cx('wrapper')}>
+            <Link to="/invoice" className={cx('link')}>
+                Xem hóa đơn
+            </Link>
             <div className={cx('wrapper-form')}>
                 <Form
                     form={formProduct}
@@ -134,7 +141,6 @@ function Product() {
             <div className={cx('wrapper-table')}>
                 <Table data={listProduct} />
             </div>
-            <Link to="/invoice">Invoice</Link>
         </div>
     )
 }

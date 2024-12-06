@@ -1,0 +1,30 @@
+.product-form {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    gap: 50px;
+}
+
+.product-list {
+    width: 800px;
+}
+
+.product-add,
+.invoice {
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.invoice {
+    margin-left: 111px;
+    margin-top: 20px;
+}
+
+.product-name {
+    word-break: break-word;
+}

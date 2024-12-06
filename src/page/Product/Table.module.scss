@@ -1,0 +1,37 @@
+.wrapper {
+    width: 80%;
+    margin: 0 auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.table {
+    margin-top: 10px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+th {
+    background-color: #9f9f9f; /* Màu tiêu đề */
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Hàng chẵn */
+}
+
+tr:hover {
+    background-color: #e9e9e9; /* Khi rê chuột */
+}
+
+.product-name {
+    word-break: break-word;
+}
