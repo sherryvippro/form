@@ -46,7 +46,7 @@ function Table({ data, title }) {
                                     <td className={cx('product-name')}>{item.tenSp}</td>
                                     <td>{item.slban}</td>
                                     <td>{item.khuyenMai}</td>
-                                    <td>0</td>
+                                    <td>{item.thanhTien}</td>
                                 </tr>
                             ))}
                         </tbody>

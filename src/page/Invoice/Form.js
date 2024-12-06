@@ -100,13 +100,7 @@ function Form({
                                     <td>{product.donGiaBan}</td>
                                     <td>{product.slban}</td>
                                     <td>{product.khuyenMai}</td>
-                                    <td>
-                                        {product.donGiaBan * product.slban -
-                                            (product.donGiaBan *
-                                                product.slban *
-                                                product.khuyenMai) /
-                                                100}
-                                    </td>
+                                    <td>{product.thanhTien}</td>
                                     <td>
                                         <button onClick={() => handleOnDelete(product.maSp)}>
                                             Xóa
@@ -164,7 +158,7 @@ function Form({
                         className={cx('value')}
                         type="number"
                         name="tongHdb"
-                        readOnly
+                        // readOnly
                         value={invoice.tongHdb}
                         onChange={handleChange}
                     />

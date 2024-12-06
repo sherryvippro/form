@@ -159,8 +159,15 @@ function Invoice() {
     const handleOnClick = (event) => {
         event.preventDefault()
         const formErrors = validateFormProduct()
+        const thanhTien =
+            invoiceDetail.donGiaBan * invoiceDetail.slban -
+            (invoiceDetail.donGiaBan * invoiceDetail.slban * invoiceDetail.khuyenMai) / 100
+        const updatedInvoiceDetail = {
+            ...invoiceDetail,
+            thanhTien,
+        }
         if (Object.keys(formErrors).length === 0) {
-            setListProduct((prevList) => [...prevList, invoiceDetail])
+            setListProduct((prevList) => [...prevList, updatedInvoiceDetail])
             setTotalPrice((prevTotal) => prevTotal + invoiceDetail.thanhTien)
             setInvoice((prevInvoice) => ({
                 ...prevInvoice,
